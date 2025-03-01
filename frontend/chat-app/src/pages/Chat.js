@@ -26,6 +26,7 @@ const Chat = () => {
     const fetchMessages = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/chat/messages");
+        console.log("Fetched messages:", res.data); // Log the fetched messages for debugging
         setMessages(res.data);
       } catch (err) {
         console.error("Error fetching messages:", err);
@@ -53,15 +54,7 @@ const Chat = () => {
       const newMessage = { user: username, text: message };
       console.log("Sending message:", newMessage); // Log the message for debugging
       socket.emit("sendMessage", newMessage);
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
       setMessage("");
-
-      // Save the message to the server
-      try {
-        await axios.post("http://localhost:5000/api/chat/messages", newMessage);
-      } catch (err) {
-        console.error("Error saving message:", err);
-      }
     }
   };
 

@@ -47,7 +47,6 @@ chatDB.once("open", () => {
 
     socket.on("sendMessage", async (message) => {
       try {
-        console.log("Received message:", message); // Log the received message for debugging
         if (!message.user || !message.text) {
           throw new Error("User and text are required fields");
         }

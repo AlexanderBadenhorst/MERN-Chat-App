@@ -23,10 +23,12 @@ if (chatDB) {
 
     // Save a new message
     router.post("/messages", async (req, res) => {
+      console.log("POST /messages called");
       try {
         const { user, text } = req.body;
         const newMessage = new Message({ user, text });
         await newMessage.save();
+        console.log("Message saved:", newMessage);
         res.status(201).json(newMessage);
       } catch (err) {
         console.error("Error saving message:", err);
