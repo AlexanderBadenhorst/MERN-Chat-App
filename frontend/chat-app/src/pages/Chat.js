@@ -25,7 +25,7 @@ const Chat = () => {
     // Load existing messages from the server
     const fetchMessages = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/chat/messages");
+        const res = await axios.get("http://localhost:5000/api/chatdb/messages");
         console.log("Fetched messages:", res.data); // Log the fetched messages for debugging
         setMessages(res.data);
       } catch (err) {

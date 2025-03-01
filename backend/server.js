@@ -25,21 +25,22 @@ mongoose.connect(process.env.MAIN_DB_URI, {
 .then(() => console.log('Connected to MAIN_DB'))
 .catch(err => console.error('Error connecting to MAIN_DB:', err));
 
-const chatDB = mongoose.createConnection(process.env.CHAT_DB_URI, {
+const messages = mongoose.createConnection(process.env.CHAT_DB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverSelectionTimeoutMS: 10000, // Increase timeout to 10 seconds
 });
 
-chatDB.on("error", (err) => {
-  console.error("Error connecting to CHAT_DB:", err);
+messages.on("error", (err) => {
+  console.error("Error connecting to messages:", err);
 });
 
-chatDB.once("open", () => {
-  console.log("Connected to CHAT_DB");
+messages.once("open", () => {
+  console.log("Connected to messages");
+  console.log("Database Name:", messages.name); // Log the database name
 
-  // Import the Message model using chatDB connection
-  const Message = require("./models/Message")(chatDB);
+  // Import the Message model using messages connection
+  const Message = require("./models/Message")(messages);
 
   // Socket.io connection
   io.on("connection", (socket) => {
@@ -72,6 +73,6 @@ chatDB.once("open", () => {
 const authRoutes = require("./routes/authRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 app.use("/api/auth", authRoutes);
-app.use("/api/chat", chatRoutes);
+app.use("/api/chatdb", chatRoutes);
 
-module.exports = { mainDB: mongoose.connection, chatDB };
+module.exports = { mainDB: mongoose.connection, messages };

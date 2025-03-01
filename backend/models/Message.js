@@ -9,5 +9,5 @@ module.exports = (connection) => {
   if (!connection) {
     throw new Error("Connection is required to create the Message model");
   }
-  return connection.model("Message", messageSchema);
+  return connection.model("Message", messageSchema, "messages"); // Specify the collection name as "messages"
 };

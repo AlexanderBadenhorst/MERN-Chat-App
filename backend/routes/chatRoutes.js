@@ -1,14 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { chatDB } = require("../server"); // Import the chatDB connection
+const { messages } = require("../server"); 
 
 let Message;
 
-// Ensure chatDB is connected before importing the Message model
-if (chatDB) {
-  chatDB.once("open", () => {
-    console.log("chatDB connection established in chatRoutes");
-    Message = require("../models/Message")(chatDB);
+if (messages) {
+  messages.once("open", () => {
+    console.log("messages connection established in chatRoutes");
+    Message = require("../models/Message")(messages);
 
     // Get all messages
     router.get("/messages", async (req, res) => {
@@ -37,7 +36,7 @@ if (chatDB) {
     });
   });
 } else {
-  console.error("chatDB is undefined");
+  console.error("messages is undefined");
 }
 
 module.exports = router;
