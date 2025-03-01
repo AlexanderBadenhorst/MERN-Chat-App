@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { messages } = require("../server"); 
+const { messages } = require("../server");
 
 let Message;
 
