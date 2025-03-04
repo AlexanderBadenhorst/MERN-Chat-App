@@ -9,6 +9,8 @@ const socket = io("http://localhost:5000"); // Adjust the URL if your server is 
 const Chat = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [editingMessage, setEditingMessage] = useState(null);
+  const [newText, setNewText] = useState("");
   const navigate = useNavigate(); // Initialize useNavigate
 
   // Get username from local storage
@@ -58,10 +60,44 @@ const Chat = () => {
     }
   };
 
+  const editMessage = async (id, newText) => {
+    console.log("Editing message with ID:", id); // Log the message ID for debugging
+    try {
+      const res = await axios.put(`http://localhost:5000/api/chatdb/messages/${id}`, {
+        user: username,
+        text: newText,
+      });
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) => (msg._id === id ? res.data : msg))
+      );
+      setEditingMessage(null);
+      setNewText("");
+    } catch (err) {
+      console.error("Error editing message:", err);
+    }
+  };
+
+  const deleteMessage = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/chatdb/messages/${id}`, {
+        data: { user: username },
+      });
+      setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== id));
+    } catch (err) {
+      console.error("Error deleting message:", err);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     navigate("/login");
+  };
+
+  const handleEditKeyPress = (e, id) => {
+    if (e.key === "Enter") {
+      editMessage(id, e.target.value);
+    }
   };
 
   return (
@@ -73,7 +109,23 @@ const Chat = () => {
       <div className="chat-messages">
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.user === username ? "user" : "other"}`}>
-            <strong>{msg.user}: </strong>{msg.text}
+            <strong>{msg.user}: </strong>
+            {editingMessage === msg._id ? (
+              <input
+                type="text"
+                defaultValue={msg.text}
+                onBlur={(e) => editMessage(msg._id, e.target.value)}
+                onKeyPress={(e) => handleEditKeyPress(e, msg._id)}
+              />
+            ) : (
+              msg.text
+            )}
+            {msg.user === username && (
+              <div className="message-actions">
+                <button className="edit-button" onClick={() => setEditingMessage(msg._id)}>Edit</button>
+                <button className="delete-button" onClick={() => deleteMessage(msg._id)}>Delete</button>
+              </div>
+            )}
           </div>
         ))}
       </div>
