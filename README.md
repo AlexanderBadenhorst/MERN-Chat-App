@@ -50,22 +50,21 @@ This project was created to practice and demonstrate full-stack development conc
 
 ---
 
-## Architecture
+### Architecture
 
-The application follows a typical MERN architecture:
+The application follows a standard MERN stack architecture:
 
-Client (React)
-      │
-      │ HTTP Requests
-      ▼
-Node.js / Express REST API
-      │
-      ▼
-MongoDB Database
+Frontend
+React application responsible for UI rendering, state management, and communicating with the backend through REST API requests.
 
-- The React frontend handles the user interface and communicates with the backend through API requests.
-- The Node.js + Express backend processes authentication, message routing, and database interactions.
-- MongoDB stores users and messages persistently.
+Backend
+Node.js and Express server handling authentication, message routing, and API endpoints.
+
+Database
+MongoDB stores user accounts and persistent chat messages.
+
+Communication Flow
+React Client → Express REST API → MongoDB
 
 ---
 
@@ -73,18 +72,24 @@ MongoDB Database
 
 ### 1. Clone the repository
 
+```bash
 git clone https://github.com/AlexanderBadenhorst/MERN-Chat-App.git
 cd MERN-Chat-App
+```
 
 ### 2. Install backend dependencies
 
+```bash
 cd backend
 npm install
+```
 
 ### 3. Install frontend dependencies
 
-cd ../frontend
+```bash
+cd frontend/chat-app
 npm install
+```
 
 ---
 
@@ -92,18 +97,21 @@ npm install
 
 ### Start the backend server
 
+```bash
 cd backend
 npm start
+```
 
 ### Start the frontend
 
-cd frontend
+```bash
+cd frontend/chat-app
 npm start
+```
 
 The application will typically run at:
 
 http://localhost:3000
-
 ---
 
 ## Learning Goals
